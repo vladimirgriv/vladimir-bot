@@ -11,7 +11,7 @@ const users = {};
 
 const questions = [
   {
-    text: `Вопрос 1 из 7\n\nСтарший коллега просит «по-человечески» доделать за него чужую работу. Твоя реакция?`,
+    text: `Вопрос 1 из 7\n\nСтарший коллега просит\n«по-человечески» доделать за него\nчужую работу.\n\nТвоя реакция?`,
     options: [
       { text: 'А) Возьму и доделаю,\nдаже если придётся\nсидеть ночью.\nГлавное — оставаться нужной.', profile: 'A' },
       { text: 'Б) Помогу, но если повторится —\nбуду молча кипеть от ярости,\nзажав её в себе.', profile: 'B' },
@@ -19,7 +19,7 @@ const questions = [
     ]
   },
   {
-    text: `Вопрос 2 из 7\n\nНачальник скидывает задачи в 10 вечера к утру. Как с этим справляешься?`,
+    text: `Вопрос 2 из 7\n\nНачальник скидывает задачи\nв 10 вечера к утру.\nКак с этим справляешься?`,
     options: [
       { text: 'А) Выполняю,\nподстраиваясь под его график.\nМои планы перестают существовать.', profile: 'A' },
       { text: 'Б) Молча терплю,\nне сплю ночами от тревоги\nи злюсь в подушку.', profile: 'B' },
@@ -27,41 +27,41 @@ const questions = [
     ]
   },
   {
-    text: `Вопрос 3 из 7\n\nКаков твой рабочий ритм в последнее время?`,
+    text: `Вопрос 3 из 7\n\nКаков твой рабочий ритм\nв последнее время?`,
     options: [
-      { text: 'А) Сил нет ни на что.\nРастворилась в чужих задачах,\nпотеряла ориентир \n«чего хочу я».', profile: 'A' },
+      { text: 'А) Сил нет ни на что.\nРастворилась в чужих задачах,\nпотеряла ориентир\nчего хочу я.', profile: 'A' },
       { text: 'Б) Пашу на износ\nв постоянном стрессе,\nдовожу себя до мигреней и слёз.', profile: 'B' },
       { text: 'В) Постоянный хаос:\nконфликты, увольнения, бурные скандалы\n— потом неделями восстанавливаюсь.', profile: 'V' },
     ]
   },
   {
-    text: `Вопрос 4 из 7\n\nПартнёр отказывается ехать в отпуск туда, куда хочешь ты. Что сделаешь?`,
+    text: `Вопрос 4 из 7\n\nПартнёр отказывается ехать в отпуск\nтуда, куда хочешь ты.\nЧто сделаешь?`,
     options: [
-      { text: 'А) Откажусь от своего желания\nи поеду туда,\nкуда хочет он. Главное — чтобы ему было хорошо.', profile: 'A' },
-      { text: 'Б) Промолчу, внешне соглашусь,\nно буду бурчать\nпро себя и злиться,\nчто опять уступила.', profile: 'B' },
+      { text: 'А) Откажусь от своего желания\nи поеду туда,\nкуда хочет он.\nГлавное — чтобы ему было хорошо.', profile: 'A' },
+      { text: 'Б) Промолчу, внешне соглашусь,\nно буду бурчать про себя\nи злиться,\nчто опять уступила.', profile: 'B' },
       { text: 'В) Устрою громкий скандал\nс припоминанием старых грехов\nили уеду с подругами.', profile: 'V' },
     ]
   },
   {
-    text: `Вопрос 5 из 7\n\nЧто происходит с твоим телом в момент стресса?`,
+    text: `Вопрос 5 из 7\n\nЧто происходит с твоим телом\nв момент стресса?`,
     options: [
-      { text: 'А) Голова отдельно\nот тела. Перестаю чувствовать\nсвои физические сигналы.', profile: 'A' },
+      { text: 'А) Голова отдельно от тела.\nПерестаю чувствовать\nсвои физические сигналы.', profile: 'A' },
       { text: 'Б) Тело каменеет:\nплечи поднимаются,\nчелюсть сжимается, замираю.', profile: 'B' },
       { text: 'В) Хватаюсь за телефон,\nиду есть сладкое или\nначинаю стучать по столу.', profile: 'V' },
     ]
   },
   {
-    text: `Вопрос 6 из 7\n\nРодственники зовут на дачу, а ты дико устала. Твои действия?`,
+    text: `Вопрос 6 из 7\n\nРодственники зовут на дачу,\nа ты дико устала.\nТвои действия?`,
     options: [
       { text: 'А) Поеду упахиваться\nна грядках, чтобы\nне потерять их любовь.', profile: 'A' },
       { text: 'Б) Откажу, но проведу\nвсе выходные\nв чувстве вины,\nчто плохая дочь.', profile: 'B' },
-      { text: 'В) Буду избегать\nобщения, не отвечать\nна звонки, лишь бы\nне вступать в прямой разговор.', profile: 'V' },
+      { text: 'В) Буду избегать общения,\nне отвечать на звонки,\nлишь бы не вступать\nв прямой разговор.', profile: 'V' },
     ]
   },
   {
-    text: `Вопрос 7 из 7\n\nТы поссорилась с друзьями, осталось много недомолвок. Каков твой сценарий?`,
+    text: `Вопрос 7 из 7\n\nТы поссорилась с друзьями,\nосталось много недомолвок.\nКаков твой сценарий?`,
     options: [
-      { text: 'А) Быстро сделаю шаг\nнавстречу и соглашусь\nс их позицией —\nдружба ценнее.', profile: 'A' },
+      { text: 'А) Быстро сделаю шаг навстречу\nи соглашусь с их позицией —\nдружба ценнее.', profile: 'A' },
       { text: 'Б) Промолчу, оставлю недоговорённости\nи буду молча варить\nэто раздражение внутри.', profile: 'B' },
       { text: 'В) Демонстративно дистанцируюсь,\nуйду в работу и просто\nвычеркну их из жизни.', profile: 'V' },
     ]
@@ -173,10 +173,12 @@ async function checkSubscription(ctx) {
 
 function sendQuestion(ctx, questionIndex) {
   const q = questions[questionIndex];
-  const buttons = q.options.map((opt, i) =>
-    [Markup.button.callback(opt.text, `answer_${questionIndex}_${i}`)]
-  );
-  return ctx.reply(q.text, Markup.inlineKeyboard(buttons));
+  let message = q.text + '\n\n';
+  q.options.forEach(opt => {
+    message += opt.text + '\n\n';
+  });
+  message += '👉 Напиши А, Б или В:';
+  return ctx.reply(message);
 }
 
 // --- СТАРТ --------------------------------------------------------------------
@@ -186,10 +188,8 @@ bot.start(async (ctx) => {
   users[userId] = { step: 0, counts: { A: 0, B: 0, V: 0 } };
 
   // Отправляем кружок (video_note)
-  // ЗАМЕНИ file_id на реальный после первой загрузки кружка
-  // Как получить file_id — см. инструкцию ниже
   await ctx.reply(
-    'Привет! Смотри короткое видео — и сразу переходим к тесту ??'
+    'Привет! Смотри короткое видео — и сразу переходим к тесту 🎬'
   );
 
   await ctx.sendVideoNote('DQACAgIAAxkBAAMUalDmBzjbcVZNnrRz0vJYlzY4QqMAAtWaAAIFVmlKKF7RMGeOUw48BA');
@@ -199,25 +199,33 @@ bot.start(async (ctx) => {
   }, 1000);
 });
 
-// --- ОБРАБОТКА ОТВЕТОВ НА ВОПРОСЫ --------------------------------------------
+// --- ОБРАБОТКА ТЕКСТОВЫХ ОТВЕТОВ ---------------------------------------------
 
-bot.action(/^answer_(\d+)_(\d+)$/, async (ctx) => {
+bot.on('text', async (ctx) => {
   const userId = ctx.from.id;
-  const questionIndex = parseInt(ctx.match[1]);
-  const optionIndex = parseInt(ctx.match[2]);
-
-  if (!users[userId]) {
-    return ctx.reply('Напиши /start чтобы начать заново.');
+  
+  // Если пользователь не в игре — игнорируем
+  if (!users[userId]) return;
+  
+  const text = ctx.message.text.trim().toUpperCase();
+  
+  // Определяем выбор
+  let choiceIndex = -1;
+  if (text === 'А' || text === 'A') choiceIndex = 0;
+  else if (text === 'Б' || text === 'B') choiceIndex = 1;
+  else if (text === 'В' || text === 'V') choiceIndex = 2;
+  
+  if (choiceIndex === -1) {
+    return ctx.reply('Пожалуйста, напиши А, Б или В 🙂');
   }
-
-  const profile = questions[questionIndex].options[optionIndex].profile;
+  
+  const questionIndex = users[userId].step;
+  const profile = questions[questionIndex].options[choiceIndex].profile;
   users[userId].counts[profile]++;
-
-  await ctx.answerCbQuery();
-  await ctx.editMessageReplyMarkup({ inline_keyboard: [] });
-
-  const nextQuestion = questionIndex + 1;
-
+  users[userId].step++;
+  
+  const nextQuestion = users[userId].step;
+  
   if (nextQuestion < questions.length) {
     // Следующий вопрос
     sendQuestion(ctx, nextQuestion);
@@ -232,10 +240,10 @@ bot.action(/^answer_(\d+)_(\d+)$/, async (ctx) => {
     // Инструмент + предложение подписки
     setTimeout(async () => {
       await ctx.reply(
-        'Чтобы получить свой инструмент — подпишись на канал Владимира ??',
+        'Чтобы получить свой инструмент — подпишись на канал Владимира 🎁',
         Markup.inlineKeyboard([
           [Markup.button.url('Подписаться на канал', 'https://t.me/grivdrum')],
-          [Markup.button.callback('? Я подписался(ась)', `check_sub_${dominantProfile}`)]
+          [Markup.button.callback('✅ Я подписался(ась)', `check_sub_${dominantProfile}`)]
         ])
       );
     }, 1500);
@@ -267,17 +275,16 @@ bot.action(/^check_sub_(.+)$/, async (ctx) => {
     }, 2000);
   } else {
     await ctx.reply(
-      'Похоже, подписка не оформлена. Подпишись на канал и нажми кнопку снова ??',
+      'Похоже, подписка не оформлена. Подпишись на канал и нажми кнопку снова 🙏',
       Markup.inlineKeyboard([
         [Markup.button.url('Подписаться на канал', 'https://t.me/grivdrum')],
-        [Markup.button.callback('? Я подписался(ась)', `check_sub_${dominantProfile}`)]
+        [Markup.button.callback('✅ Я подписался(ась)', `check_sub_${dominantProfile}`)]
       ])
     );
   }
 });
 
 // --- ЗАПУСК -------------------------------------------------------------------
-
 
 const http = require('http');
 http.createServer((req, res) => res.end('ok')).listen(process.env.PORT || 3000);
