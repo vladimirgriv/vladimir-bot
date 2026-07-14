@@ -188,7 +188,7 @@ bot.on('text', async (ctx) => {
 
     setTimeout(async () => {
       await ctx.reply(
-        'Чтобы получить свой инструмент — подпишись на мой канал 🎁',
+        'Чтобы получить инструмент — подпишись на мой канал 🎁',
         Markup.inlineKeyboard([
           [Markup.button.url('Подписаться на канал', 'https://t.me/grivdrum')],
           [Markup.button.callback('✅ Я подписался(ась)', `check_sub_${dominantProfile}`)]
