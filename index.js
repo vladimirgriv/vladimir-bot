@@ -68,6 +68,17 @@ const questions = [
   },
 ];
 
+// --- ПРОМЕЖУТОЧНЫЕ ФРАЗЫ ПОСЛЕ ОТВЕТОВ ---------------------------------------
+
+const feedbackMessages = [
+  'Хорошо, идём дальше',
+  '',
+  '',
+  'Супер, осталось 3 вопроса',
+  'Ты на финишной прямой 🔥',
+  'И последний вопрос.',
+];
+
 // --- РЕЗУЛЬТАТЫ ПРОФИЛЕЙ ------------------------------------------------------
 
 const profiles = {
@@ -156,7 +167,6 @@ const profiles = {
 
 function getProfile(counts) {
   const max = Math.max(counts.A, counts.B, counts.V);
-  // При ничьей приоритет: A > B > V
   if (counts.A === max) return 'A';
   if (counts.B === max) return 'B';
   return 'V';
@@ -177,7 +187,7 @@ function sendQuestion(ctx, questionIndex) {
   q.options.forEach(opt => {
     message += opt.text + '\n\n';
   });
-  message += '👉 Напиши А, Б или В:';
+  message += ' Напиши А, Б или В:';
   return ctx.reply(message);
 }
 
@@ -187,16 +197,16 @@ bot.start(async (ctx) => {
   const userId = ctx.from.id;
   users[userId] = { step: 0, counts: { A: 0, B: 0, V: 0 } };
 
-  // Отправляем кружок (video_note)
   await ctx.reply(
     'Привет! Смотри короткое видео — и сразу переходим к тесту 🎬'
   );
 
   await ctx.sendVideoNote('DQACAgIAAxkBAAMUalDmBzjbcVZNnrRz0vJYlzY4QqMAAtWaAAIFVmlKKF7RMGeOUw48BA');
 
+  // ✅ ПУНКТ 1: Задержка 10 секунд между кружком и первым вопросом
   setTimeout(() => {
     sendQuestion(ctx, 0);
-  }, 1000);
+  }, 10000);
 });
 
 // --- ОБРАБОТКА ТЕКСТОВЫХ ОТВЕТОВ ---------------------------------------------
@@ -204,12 +214,10 @@ bot.start(async (ctx) => {
 bot.on('text', async (ctx) => {
   const userId = ctx.from.id;
   
-  // Если пользователь не в игре — игнорируем
   if (!users[userId]) return;
   
   const text = ctx.message.text.trim().toUpperCase();
   
-  // Определяем выбор
   let choiceIndex = -1;
   if (text === 'А' || text === 'A') choiceIndex = 0;
   else if (text === 'Б' || text === 'B') choiceIndex = 1;
@@ -226,27 +234,34 @@ bot.on('text', async (ctx) => {
   
   const nextQuestion = users[userId].step;
   
-  if (nextQuestion < questions.length) {
-    // Следующий вопрос
-    sendQuestion(ctx, nextQuestion);
-  } else {
-    // Тест завершён — считаем профиль
+if (nextQuestion < questions.length) {
+    const feedback = feedbackMessages[questionIndex];
+    
+    if (feedback) {
+      await ctx.reply(feedback);
+      setTimeout(() => {
+        sendQuestion(ctx, nextQuestion);
+      }, 1500);
+    } else {
+      sendQuestion(ctx, nextQuestion);
+    }
+  }
+    // Тест завершён
     const dominantProfile = getProfile(users[userId].counts);
     const p = profiles[dominantProfile];
 
-    // Результат
+    // ✅ ПУНКТ 4: Задержка 10 секунд перед сообщением о подписке
     await ctx.reply(p.result);
 
-    // Инструмент + предложение подписки
     setTimeout(async () => {
       await ctx.reply(
-        'Чтобы получить свой инструмент — подпишись на канал Владимира 🎁',
+        'Чтобы получить свой инструмент — подпишись на мой канал 🎁',
         Markup.inlineKeyboard([
           [Markup.button.url('Подписаться на канал', 'https://t.me/grivdrum')],
           [Markup.button.callback('✅ Я подписался(ась)', `check_sub_${dominantProfile}`)]
         ])
       );
-    }, 1500);
+    }, 10000);
   }
 });
 
@@ -264,7 +279,7 @@ bot.action(/^check_sub_(.+)$/, async (ctx) => {
     // Выдаём инструмент
     await ctx.reply(p.instrument);
 
-    // Переход к диагностике
+    // ✅ ПУНКТ 5: Задержка 2 минуты перед финальным CTA
     setTimeout(async () => {
       await ctx.reply(
         p.cta,
@@ -272,7 +287,7 @@ bot.action(/^check_sub_(.+)$/, async (ctx) => {
           [Markup.button.url('Написать Владимиру', 'https://t.me/vladimirgriv')]
         ])
       );
-    }, 2000);
+    }, 120000);
   } else {
     await ctx.reply(
       'Похоже, подписка не оформлена. Подпишись на канал и нажми кнопку снова 🙏',
