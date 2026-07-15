@@ -208,9 +208,20 @@ bot.action(/^check_sub_(.+)$/, async (ctx) => {
 
   const isSubscribed = await checkSubscription(ctx);
 
-  if (isSubscribed) {
-    await ctx.reply(p.instrument);
+  // Ссылки на картинки для каждого профиля
+  const photoUrls = {
+    'A': 'https://raw.githubusercontent.com/vladimirgriv/vladimir-bot/main/1784138104.png',
+    'B': 'https://raw.githubusercontent.com/vladimirgriv/vladimir-bot/main/17841387537293.png',
+    'V': 'https://raw.githubusercontent.com/vladimirgriv/vladimir-bot/main/1784138961d7f2.png'
+  };
 
+  if (isSubscribed) {
+    // Отправляем картинку с текстом упражнения
+    await ctx.replyWithPhoto(photoUrls[dominantProfile], {
+      caption: p.instrument
+    });
+
+    // Задержка 2 минуты перед финальным CTA
     setTimeout(async () => {
       await ctx.reply(
         p.cta,
