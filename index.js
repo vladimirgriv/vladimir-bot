@@ -208,11 +208,11 @@ bot.action(/^check_sub_(.+)$/, async (ctx) => {
 
   const isSubscribed = await checkSubscription(ctx);
 
-  // Ссылки на картинки для каждого профиля
+  // Ссылки на картинки для каждого профиля (исправленные)
   const photoUrls = {
-    'A': 'https://raw.githubusercontent.com/vladimirgriv/vladimir-bot/main/1784138104.png',
-    'B': 'https://raw.githubusercontent.com/vladimirgriv/vladimir-bot/main/17841387537293.png',
-    'V': 'https://raw.githubusercontent.com/vladimirgriv/vladimir-bot/main/1784138961d7f2.png'
+    'A': 'https://raw.githubusercontent.com/vladimirgriv/vladimir-bot/main/1784138961d7f2.png', // Замечание
+    'B': 'https://raw.githubusercontent.com/vladimirgriv/vladimir-bot/main/17841387537293.png', // Напряжение
+    'V': 'https://raw.githubusercontent.com/vladimirgriv/vladimir-bot/main/1784138104.png'      // Стена
   };
 
   if (isSubscribed) {
