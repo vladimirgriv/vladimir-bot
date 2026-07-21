@@ -3,12 +3,22 @@ const { Telegraf, Markup } = require('telegraf');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const CHANNEL_ID = process.env.CHANNEL_ID;
+const ADMIN_ID = process.env.ADMIN_ID; // Твой ID для уведомлений
 
 // Хранилище данных пользователей (в памяти)
 const users = {};
 
-// --- ВОПРОСЫ КВИЗА -----------------------------------------------------------
+// --- ФУНКЦИЯ УВЕДОМЛЕНИЯ АДМИНА ----------------------------------------------
+async function notifyAdmin(message) {
+  if (!ADMIN_ID) return;
+  try {
+    await bot.telegram.sendMessage(ADMIN_ID, message);
+  } catch (e) {
+    console.error('Ошибка отправки уведомления админу:', e);
+  }
+}
 
+// --- ВОПРОСЫ КВИЗА -----------------------------------------------------------
 const questions = [
   {
     text: `Вопрос 1 из 7\n\nСтарший коллега просит\n«по-человечески» доделать за него\nчужую работу.\n\nТвоя реакция?`,
@@ -69,7 +79,6 @@ const questions = [
 ];
 
 // --- ПРОМЕЖУТОЧНЫЕ ФРАЗЫ ПОСЛЕ ОТВЕТОВ ---------------------------------------
-
 const feedbackMessages = [
   'Хорошо, идём дальше',
   '',
@@ -80,7 +89,6 @@ const feedbackMessages = [
 ];
 
 // --- РЕЗУЛЬТАТЫ ПРОФИЛЕЙ ------------------------------------------------------
-
 const profiles = {
   A: {
     result: `Твой профиль: «Истощённая хорошая девочка»\n\nТы запретила себе злиться настолько глубоко, что агрессия переродилась в хроническую усталость и апатию. Твои личные границы стёрты. Ты обслуживаешь чужие интересы и тратишь остатки сил на то, чтобы оставаться удобной. Батарейка на нуле, а голова живёт отдельно от тела.`,
@@ -100,7 +108,6 @@ const profiles = {
 };
 
 // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ -------------------------------------------------
-
 function getProfile(counts) {
   const max = Math.max(counts.A, counts.B, counts.V);
   if (counts.A === max) return 'A';
@@ -128,15 +135,15 @@ function sendQuestion(ctx, questionIndex) {
 }
 
 // --- СТАРТ --------------------------------------------------------------------
-
 bot.start(async (ctx) => {
   const userId = ctx.from.id;
   users[userId] = { step: 0, counts: { A: 0, B: 0, V: 0 } };
 
-  await ctx.reply(
-    'Привет! Смотри короткое видео — и сразу переходим к тесту '
-  );
+  // Уведомление админу о новом пользователе
+  const userName = ctx.from.username ? `@${ctx.from.username}` : `ID: ${ctx.from.id}`;
+  await notifyAdmin(`🟢 *Новый пользователь:* ${userName}\nЗапустил бота.`);
 
+  await ctx.reply('Привет! Смотри короткое видео — и сразу переходим к тесту 🎬');
   await ctx.sendVideoNote('DQACAgIAAxkBAAMUalDmBzjbcVZNnrRz0vJYlzY4QqMAAtWaAAIFVmlKKF7RMGeOUw48BA');
 
   setTimeout(() => {
@@ -145,7 +152,6 @@ bot.start(async (ctx) => {
 });
 
 // --- ОБРАБОТКА ТЕКСТОВЫХ ОТВЕТОВ ---------------------------------------------
-
 bot.on('text', async (ctx) => {
   const userId = ctx.from.id;
   
@@ -167,11 +173,14 @@ bot.on('text', async (ctx) => {
   users[userId].counts[profile]++;
   users[userId].step++;
   
+  // Уведомление админу об ответе
+  const userName = ctx.from.username ? `@${ctx.from.username}` : `ID: ${ctx.from.id}`;
+  await notifyAdmin(`📝 *Пользователь:* ${userName}\nВопрос ${questionIndex + 1}: выбрал вариант *${text}* (Профиль: ${profile})`);
+  
   const nextQuestion = users[userId].step;
   
   if (nextQuestion < questions.length) {
     const feedback = feedbackMessages[questionIndex];
-    
     if (feedback) {
       await ctx.reply(feedback);
       setTimeout(() => {
@@ -184,11 +193,13 @@ bot.on('text', async (ctx) => {
     const dominantProfile = getProfile(users[userId].counts);
     const p = profiles[dominantProfile];
 
+    await notifyAdmin(`🏁 *Пользователь:* ${userName}\nЗавершил тест! Итоговый профиль: *${dominantProfile}*`);
+
     await ctx.reply(p.result);
 
     setTimeout(async () => {
       await ctx.reply(
-        'Чтобы получить инструмент — подпишись на мой канал 🎁',
+        'Чтобы получить свой инструмент — подпишись на мой канал 🎁',
         Markup.inlineKeyboard([
           [Markup.button.url('Подписаться на канал', 'https://t.me/grivdrum')],
           [Markup.button.callback('✅ Я подписался(ась)', `check_sub_${dominantProfile}`)]
@@ -199,7 +210,6 @@ bot.on('text', async (ctx) => {
 });
 
 // --- ПРОВЕРКА ПОДПИСКИ --------------------------------------------------------
-
 bot.action(/^check_sub_(.+)$/, async (ctx) => {
   const dominantProfile = ctx.match[1];
   const p = profiles[dominantProfile];
@@ -208,20 +218,17 @@ bot.action(/^check_sub_(.+)$/, async (ctx) => {
 
   const isSubscribed = await checkSubscription(ctx);
 
-  // Ссылки на картинки для каждого профиля (исправленные)
   const photoUrls = {
-    'A': 'https://raw.githubusercontent.com/vladimirgriv/vladimir-bot/main/1784138961d7f2.png', // Замечание
-    'B': 'https://raw.githubusercontent.com/vladimirgriv/vladimir-bot/main/17841387537293.png', // Напряжение
-    'V': 'https://raw.githubusercontent.com/vladimirgriv/vladimir-bot/main/1784138104.png'      // Стена
+    'A': 'https://raw.githubusercontent.com/vladimirgriv/vladimir-bot/main/1784138961d7f2.png',
+    'B': 'https://raw.githubusercontent.com/vladimirgriv/vladimir-bot/main/17841387537293.png',
+    'V': 'https://raw.githubusercontent.com/vladimirgriv/vladimir-bot/main/1784138104.png'
   };
 
   if (isSubscribed) {
-    // Отправляем картинку с текстом упражнения
     await ctx.replyWithPhoto(photoUrls[dominantProfile], {
       caption: p.instrument
     });
 
-    // Задержка 2 минуты перед финальным CTA
     setTimeout(async () => {
       await ctx.reply(
         p.cta,
@@ -242,7 +249,6 @@ bot.action(/^check_sub_(.+)$/, async (ctx) => {
 });
 
 // --- ЗАПУСК -------------------------------------------------------------------
-
 const http = require('http');
 http.createServer((req, res) => res.end('ok')).listen(process.env.PORT || 3000);
 
